@@ -68,14 +68,14 @@ def main():
 	zmq_producer(context,instrument)
 
 def zmq_server(context):
-    '''Funnel messages coming from the external tcp socket to an inproc socket'''
+   	'''Funnel messages coming from the external tcp socket to an inproc socket'''
 	sock_incoming = context.socket(zmq.SUB)
 	sock_outgoing = context.socket(zmq.PUB)
-    sock_incoming.bind('tcp://*:5000')
-    sock_outgoing.bind('inproc://queue')
-    sock_incoming.setsockopt(zmq.SUBSCRIBE, "")
-    while True:
-        msg = sock_incoming.recv()
+   	sock_incoming.bind('tcp://*:5000')
+   	sock_outgoing.bind('inproc://queue')
+   	sock_incoming.setsockopt(zmq.SUBSCRIBE, "")
+   	while True:
+   		msg = sock_incoming.recv()
         sock_outgoing.send(msg)
 
 class WebSocketApp(object):

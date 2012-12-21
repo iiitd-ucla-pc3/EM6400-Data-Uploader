@@ -1,13 +1,11 @@
-import minimalmodbus
-import time
-import struct
-import datetime
-import pytz
-import math
-import json
-
-
 from ctypes import *
+import datetime
+import minimalmodbus
+import os
+import pytz
+import struct
+import time
+
 threshold_time=900
 def convert(s):
 	return struct.unpack("<f",struct.pack("<I",s))[0]
@@ -22,6 +20,8 @@ start_day=now.day
 start_month=now.month
 print start_day
 print start_month
+if not os.path.exists('/root/data/'+str(start_day)+"_"+str(start_month)):
+		os.makedirs('/root/data/'+str(start_day)+"_"+str(start_month))
 f=open("data/"+str(start_day)+"_"+str(start_month)+"/0.csv","wa")
 count=0
 
@@ -40,18 +40,18 @@ while True:
 		start_day=now_day
 		start_month=now_month
 		f.close()
+		if not os.path.exists('/root/data/'+str(start_day)+"_"+str(start_month)):
+			os.makedirs('/root/data/'+str(start_day)+"_"+str(start_month))
 		f=open("data/"+str(start_day)+"_"+str(start_month)+"/"+str(count)+".csv","wa")
 
 	else:
 		try:
-			temperature = instrument.read_registers(3900,80)
-			#print temperature
+			readings_array = instrument.read_registers(3900,80)
 			row=str(now_time)+","
-			for i in range(0,len(temperature)-1,2):
-				a=(temperature[i+1]<<16) +temperature[i]
+			for i in range(0,len(readings_array)-1,2):
+				a=(readings_array[i+1]<<16) +readings_array[i]
 				row=row+str(convert(a))+","
 			row=row[:-1]+"\n"
-			#print row
 			f.write(row)
 		
 		except Exception as e:

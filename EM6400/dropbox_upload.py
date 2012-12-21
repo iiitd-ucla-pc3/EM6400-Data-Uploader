@@ -30,7 +30,7 @@ try:
 		for f in list_of_files:	    
 			if int(time.time())-int(os.stat(f).st_mtime)>threshold:
 				# Upload the file
-				print f +"will be uploaded"
+				print f +" will be uploaded"
 				conn.upload_file(f,base_upload_path+str(folder),f)
 				os.remove(f)
 except:
