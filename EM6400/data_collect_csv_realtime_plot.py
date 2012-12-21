@@ -1,16 +1,17 @@
-import minimalmodbus
-import time
-import struct
-import datetime
-import os
-import json
-import webbrowser
-import paste.urlparser
-import gevent
+from ctypes import *
 from gevent_zeromq import zmq
 from geventwebsocket.handler import WebSocketHandler
-
-from ctypes import *
+import datetime
+import gevent
+import json
+import math
+import minimalmodbus
+import os
+import paste.urlparser
+import random
+import struct
+import time
+import webbrowser
 threshold_time=900
 global start_time
 start_time=int(time.time())
@@ -23,6 +24,7 @@ start_month=now.month
 global count
 count=0
 global f
+data_base_path="/home/nipun/Desktop/data/"
 
 def convert(s):
 	return struct.unpack("<f",struct.pack("<I",s))[0]
@@ -50,32 +52,25 @@ def main():
 	# Open a couple of webbrowsers
 	#webbrowser.open('http://localhost:8000/graph.html')
     #webbrowser.open('http://localhost:8000/graph.html')
-    # Kick off the producer
     
 	instrument = minimalmodbus.Instrument('/dev/ttyUSB0', 1)
 	instrument.serial.baudrate = 19200   # Baud
-	#instrument.debug = True
-	
-
-
-
-
 	global f
-	if not os.path.exists('/root/data/'+str(start_day)+"_"+str(start_month)):
-		os.makedirs('/root/data/'+str(start_day)+"_"+str(start_month))
-	f=open("/root/data/"+str(start_day)+"_"+str(start_month)+"/0.csv","wa")
+	if not os.path.exists(data_base_path+str(start_day)+"_"+str(start_month)):
+		os.makedirs(data_base_path+str(start_day)+"_"+str(start_month))
+	f=open(data_base_path+str(start_day)+"_"+str(start_month)+"/0.csv","wa")
 	#count=0
 	zmq_producer(context,instrument)
 
 def zmq_server(context):
-   	'''Funnel messages coming from the external tcp socket to an inproc socket'''
-	sock_incoming = context.socket(zmq.SUB)
-	sock_outgoing = context.socket(zmq.PUB)
-   	sock_incoming.bind('tcp://*:5000')
-   	sock_outgoing.bind('inproc://queue')
-   	sock_incoming.setsockopt(zmq.SUBSCRIBE, "")
-   	while True:
-   		msg = sock_incoming.recv()
+    '''Funnel messages coming from the external tcp socket to an inproc socket'''
+    sock_incoming = context.socket(zmq.SUB)
+    sock_outgoing = context.socket(zmq.PUB)
+    sock_incoming.bind('tcp://*:5000')
+    sock_outgoing.bind('inproc://queue')
+    sock_incoming.setsockopt(zmq.SUBSCRIBE, "")
+    while True:
+        msg = sock_incoming.recv()
         sock_outgoing.send(msg)
 
 class WebSocketApp(object):
@@ -115,28 +110,29 @@ def zmq_producer(context,instrument):
 			start_day=now_day
 			start_month=now_month
 			f.close()
-			if not os.path.exists('/root/data/'+str(start_day)+"_"+str(start_month)):
-				os.makedirs('/root/data/'+str(start_day)+"_"+str(start_month))
-			f=open("/root/data/"+str(start_day)+"_"+str(start_month)+"/"+str(count)+".csv","wa")
+			f=open(data_base_path+str(start_day)+"_"+str(start_month)+"/"+str(count)+".csv","wa")
 
 		else:
 			try:
-				readings_array = instrument.read_registers(3900,80)
+				temperature = instrument.read_registers(3900,80)
+				#print temperature
 				row=str(now_time)+","
-				for i in range(0,len(readings_array)-1,2):
-					a=(readings_array[i+1]<<16) +readings_array[i]
+				for i in range(0,len(temperature)-1,2):
+					a=(temperature[i+1]<<16) +temperature[i]
 					row=row+str(convert(a))+","
 				row=	row[:-1]+"\n"
-				
+				#print row
 				f.write(row)
 				x = time.time() * 1000+19800000
 				y=float(row.split(",")[2])
 				socket.send(json.dumps(dict(x=x, y=y)))
+				#print x,y
 				gevent.sleep(0.5)		
 			except Exception as e:
 				print e
 				print time.time() 
 				instrument = minimalmodbus.Instrument('/dev/ttyUSB0', 1)		
+	
 
 	
 if __name__ == '__main__':

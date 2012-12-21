@@ -1,19 +1,14 @@
 $(function() {
-	var a=document.URL;
-	var n=a.split("/");
-	var c=n[2];
-	var d=c.split(":")[0];
-	 
-    var ws = new WebSocket("ws://"+d+":9999/test");
+    var ws = new WebSocket("ws://localhost:9999/test");
     var $placeholder = $('#placeholder');
-    var datalen = 10;
+    var datalen = 12;
     var plot = null;
     var series = {
         label: "Value",
         lines: { 
             show: true,
             fill: true,
-            shadowSize: 50	
+            shadowSize: 5
         },
         points: {
             show:true
@@ -30,12 +25,12 @@ $(function() {
             plot.setData([series]);
             plot.setupGrid();
             plot.draw();
-        } else if(series.data.length > 1) {
+        } else if(series.data.length > 10) {
             plot = $.plot($placeholder, [series], {
                 xaxis:{
                     mode: "time",
                     timeformat: "%H:%M:%S",
-                    minTickSize: [1, "second"],
+                    minTickSize: [2, "second"],
                 },
                 
             });
@@ -52,5 +47,4 @@ $(function() {
         $('#conn_status').html('<b>Closed</b>');
     }
 });
-
 
