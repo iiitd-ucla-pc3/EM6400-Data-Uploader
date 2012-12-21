@@ -13,7 +13,7 @@ $(function() {
         label: "Value",
         lines: { 
             show: true,
-            fill: true,
+            fill: false,
             shadowSize: 5
         },
         points: {

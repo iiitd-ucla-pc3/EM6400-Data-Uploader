@@ -6,6 +6,8 @@ import pytz
 import struct
 import time
 
+data_base_path="/home/nipun/Desktop/data/"
+
 threshold_time=900
 def convert(s):
 	return struct.unpack("<f",struct.pack("<I",s))[0]
@@ -20,9 +22,9 @@ start_day=now.day
 start_month=now.month
 print start_day
 print start_month
-if not os.path.exists('/root/data/'+str(start_day)+"_"+str(start_month)):
-		os.makedirs('/root/data/'+str(start_day)+"_"+str(start_month))
-f=open("/root/data/"+str(start_day)+"_"+str(start_month)+"/0.csv","wa")
+if not os.path.exists(data_base_path+str(start_day)+"_"+str(start_month)):
+		os.makedirs(data_base_path+str(start_day)+"_"+str(start_month))
+f=open(data_base_path+str(start_day)+"_"+str(start_month)+"/0.csv","wa")
 count=0
 
 while True:
@@ -40,9 +42,9 @@ while True:
 		start_day=now_day
 		start_month=now_month
 		f.close()
-		if not os.path.exists('/root/data/'+str(start_day)+"_"+str(start_month)):
-			os.makedirs('/root/data/'+str(start_day)+"_"+str(start_month))
-		f=open("/root/data/"+str(start_day)+"_"+str(start_month)+"/"+str(count)+".csv","wa")
+		if not os.path.exists(data_base_path+str(start_day)+"_"+str(start_month)):
+			os.makedirs(data_base_path+str(start_day)+"_"+str(start_month))
+		f=open(data_base_path+str(start_day)+"_"+str(start_month)+"/"+str(count)+".csv","wa")
 
 	else:
 		try:
