@@ -22,7 +22,7 @@ print start_day
 print start_month
 if not os.path.exists('/root/data/'+str(start_day)+"_"+str(start_month)):
 		os.makedirs('/root/data/'+str(start_day)+"_"+str(start_month))
-f=open("data/"+str(start_day)+"_"+str(start_month)+"/0.csv","wa")
+f=open("/root/data/"+str(start_day)+"_"+str(start_month)+"/0.csv","wa")
 count=0
 
 while True:
@@ -42,7 +42,7 @@ while True:
 		f.close()
 		if not os.path.exists('/root/data/'+str(start_day)+"_"+str(start_month)):
 			os.makedirs('/root/data/'+str(start_day)+"_"+str(start_month))
-		f=open("data/"+str(start_day)+"_"+str(start_month)+"/"+str(count)+".csv","wa")
+		f=open("/root/data/"+str(start_day)+"_"+str(start_month)+"/"+str(count)+".csv","wa")
 
 	else:
 		try:
