@@ -1,5 +1,11 @@
 $(function() {
-    var ws = new WebSocket("ws://localhost:9999/test");
+    var a=document.URL;
+	var n=a.split("/");
+	//alert(n);
+	var c=n[2];
+	var d=c.split(":")[0];
+	 
+    var ws = new WebSocket("ws://"+d+":9999/test");
     var $placeholder = $('#placeholder');
     var datalen = 12;
     var plot = null;
