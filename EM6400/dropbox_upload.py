@@ -1,16 +1,18 @@
 from dbupload import DropboxConnection
 from getpass import getpass
-import random,time,glob,os
+import db_password
+import random
+import time
+import glob
+import os
 
-#email = raw_input("Enter Dropbox email address:")
-#password = getpass("Enter Dropbox password:")
 
-email="smartroom.iiit@gmail.com"	
-password="password"
-# Create a little test file
+email=db_password.email
+password=db_password.password
+
 
 threshold=900
-base_path='/root/em6400/data/'
+base_path='/root/data/'
 #Path in Dropbox in which to upload the data
 base_upload_path='/SmartMeter/Lab/'
 folders=os.listdir(base_path)
