@@ -1,5 +1,5 @@
 from configuration import METER_PORT, METER_ID, DATA_BASE_PATH, THRESHOLD_TIME, \
-	TIMEZONE, EM6400_BASE_REGISTER, EM6400_NUMBER_OF_REGISTERS, BAUD_RATE
+	TIMEZONE, EM6400_BASE_REGISTER, EM6400_NUMBER_OF_REGISTERS, BAUD_RATE, HEADER
 from utilities import convert, find_count
 import datetime
 import minimalmodbus
@@ -33,6 +33,7 @@ while True:
 		start_month=now_month
 		f.close()
 		f=open(DATA_BASE_PATH+str(start_day)+"_"+str(start_month)+"/"+str(count)+".csv","wa")
+		f.write(HEADER)
 
 	else:
 		try:
