@@ -26,7 +26,7 @@ while True:
 	
 	if ((now_time-start_time) > THRESHOLD_TIME) or (now_day!=start_day):
 		if now_day!=start_day:
-			count=find_count(now_day, now_month)
+			count=find_count(now_day, now_month)-1
 		count=count+1
 		start_time=now_time
 		start_day=now_day
