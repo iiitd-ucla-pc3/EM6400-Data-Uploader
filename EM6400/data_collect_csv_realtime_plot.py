@@ -1,41 +1,33 @@
-from ctypes import *
+from configuration import THRESHOLD_TIME, DATA_BASE_PATH, METER_PORT, METER_ID, \
+	BAUD_RATE, HEADER, EM6400_BASE_REGISTER, EM6400_NUMBER_OF_REGISTERS,\
+	GMT_TIME_DIFFERENCE_MILLISECONDS, TIMEZONE
 from gevent_zeromq import zmq
 from geventwebsocket.handler import WebSocketHandler
+from utilities import find_count, convert
 import datetime
 import gevent
 import json
-import math
 import minimalmodbus
 import os
 import paste.urlparser
-import random
-import struct
 import time
-import webbrowser
-threshold_time=900
+import pytz
 global start_time
 start_time=int(time.time())
 global now
-now=datetime.datetime.now()
+now=datetime.datetime.now(pytz.timezone(TIMEZONE))
 global start_date
 start_day=now.day
 global start_month
 start_month=now.month
 global count
-count=0
+count=find_count(now.day, now.month)
 global f
-data_base_path="/home/nipun/Desktop/data/"
-
-def convert(s):
-	return struct.unpack("<f",struct.pack("<I",s))[0]
-    
+   
 def main():
 	'''Set up zmq context and greenlets for all the servers, then launch the web
 	browser and run the data producer'''
 	context = zmq.Context()
-    
-    
-
 	# zeromq: tcp to inproc gateway
 	gevent.spawn(zmq_server, context)
 	# websocket server: copies inproc zmq messages to websocket
@@ -49,17 +41,11 @@ def main():
 	# Start the server greenlets
 	http_server.start()
 	ws_server.start()
-	# Open a couple of webbrowsers
-	#webbrowser.open('http://localhost:8000/graph.html')
-    #webbrowser.open('http://localhost:8000/graph.html')
-    
-	instrument = minimalmodbus.Instrument('/dev/ttyUSB0', 1)
-	instrument.serial.baudrate = 19200   # Baud
+	instrument = minimalmodbus.Instrument(METER_PORT, METER_ID)
+	instrument.serial.baudrate = BAUD_RATE
 	global f
-	if not os.path.exists(data_base_path+str(start_day)+"_"+str(start_month)):
-		os.makedirs(data_base_path+str(start_day)+"_"+str(start_month))
-	f=open(data_base_path+str(start_day)+"_"+str(start_month)+"/0.csv","wa")
-	#count=0
+	global count
+	f=open(DATA_BASE_PATH+str(start_day)+"_"+str(start_month)+"/"+str(count)+".csv","wa")
 	zmq_producer(context,instrument)
 
 def zmq_server(context):
@@ -89,49 +75,46 @@ class WebSocketApp(object):
             ws.send(msg)
 
 def zmq_producer(context,instrument):
-    '''Produce a nice time series sine wave'''
     socket = context.socket(zmq.PUB)
     socket.connect('tcp://127.0.0.1:5000')
 
     while True:
 		now_time=int(time.time())
-		now=datetime.datetime.now()
+		now=datetime.datetime.now(pytz.timezone(TIMEZONE))
 		now_day=now.day
 		now_month=now.month
 		global start_time
 		global start_day
 		global count
 		global f
-		if ((now_time-start_time) > threshold_time) or (now_day>start_day):
-			if now_day>start_day:
+		if ((now_time-start_time) > THRESHOLD_TIME) or (now_day!=start_day):
+			if now_day!=start_day:
 				count=-1
 			count=count+1
 			start_time=now_time
 			start_day=now_day
 			start_month=now_month
 			f.close()
-			f=open(data_base_path+str(start_day)+"_"+str(start_month)+"/"+str(count)+".csv","wa")
+			f=open(DATA_BASE_PATH+str(start_day)+"_"+str(start_month)+"/"+str(count)+".csv","wa")
+			f.write(HEADER)
 
 		else:
 			try:
-				temperature = instrument.read_registers(3900,80)
-				#print temperature
+				readings_array = instrument.read_registers(EM6400_BASE_REGISTER,EM6400_NUMBER_OF_REGISTERS)
 				row=str(now_time)+","
-				for i in range(0,len(temperature)-1,2):
-					a=(temperature[i+1]<<16) +temperature[i]
+				for i in range(0,len(readings_array)-1,2):
+					a=(readings_array[i+1]<<16) +readings_array[i]
 					row=row+str(convert(a))+","
-				row=	row[:-1]+"\n"
-				#print row
+				row=row[:-1]+"\n"
 				f.write(row)
-				x = time.time() * 1000+19800000
+				x = time.time() * 1000+GMT_TIME_DIFFERENCE_MILLISECONDS
 				y=float(row.split(",")[2])
 				socket.send(json.dumps(dict(x=x, y=y)))
-				#print x,y
 				gevent.sleep(0.5)		
 			except Exception as e:
 				print e
 				print time.time() 
-				instrument = minimalmodbus.Instrument('/dev/ttyUSB0', 1)		
+				instrument = minimalmodbus.Instrument(METER_PORT, METER_ID)		
 	
 
 	
