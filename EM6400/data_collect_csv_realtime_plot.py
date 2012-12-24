@@ -46,6 +46,7 @@ def main():
 	global f
 	global count
 	f=open(DATA_BASE_PATH+str(start_day)+"_"+str(start_month)+"/"+str(count)+".csv","wa")
+	f.write(HEADER)
 	zmq_producer(context,instrument)
 
 def zmq_server(context):

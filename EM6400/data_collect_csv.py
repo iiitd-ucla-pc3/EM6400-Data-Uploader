@@ -16,6 +16,7 @@ start_month=now.month
 count=find_count(now.day, now.month)
 
 f=open(DATA_BASE_PATH+str(start_day)+"_"+str(start_month)+"/"+str(count)+".csv","wa")
+f.write(HEADER)
 
 while True:
 	now_time=int(time.time())
