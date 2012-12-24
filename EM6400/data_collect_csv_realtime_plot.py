@@ -89,7 +89,7 @@ def zmq_producer(context,instrument):
 		global f
 		if ((now_time-start_time) > THRESHOLD_TIME) or (now_day!=start_day):
 			if now_day!=start_day:
-				count=-1
+				count=find_count(now_day, now_month)-1 #Decrementing by one since we always increase by 1 o/w
 			count=count+1
 			start_time=now_time
 			start_day=now_day

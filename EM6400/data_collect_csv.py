@@ -26,13 +26,12 @@ while True:
 	
 	if ((now_time-start_time) > THRESHOLD_TIME) or (now_day!=start_day):
 		if now_day!=start_day:
-			count=-1
+			count=find_count(now_day, now_month)
 		count=count+1
 		start_time=now_time
 		start_day=now_day
 		start_month=now_month
 		f.close()
-		count=find_count(start_day, start_month)
 		f=open(DATA_BASE_PATH+str(start_day)+"_"+str(start_month)+"/"+str(count)+".csv","wa")
 
 	else:
