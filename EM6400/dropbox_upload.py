@@ -5,7 +5,7 @@ import glob
 import os
 import time
 
-
+DATA_BASE_PATH="/home/nipun/Desktop/data/"
 email=db_password.email
 password=db_password.password
 
@@ -21,7 +21,7 @@ try:
         for f in list_of_files:    
             if int(time.time())-int(os.stat(f).st_mtime)>THRESHOLD_TIME:
                 # Upload the file
-                print f +"will be uploaded"
+                print f +" will be uploaded"
                 conn.upload_file(f,BASE_UPLOAD_PATH+str(folder),f)
                 os.remove(f)
 except:
