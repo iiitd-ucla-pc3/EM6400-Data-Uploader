@@ -53,7 +53,7 @@ draw_plot_field_names("csv_with_header.csv",["V1","A1","V2","VAR1"],True,False)
 #draw_plot_field_names("csv_without_header.csv",["V1","A1","V2"],False,False)
 
 #Plotting data from a CSV without header row for 2,3,4th parameter and saving plots 
-draw_plot("csv_without_header.csv",[2,3,11],False,True)
+#draw_plot("csv_without_header.csv",[2,3,11],False,True)
 
 
 
