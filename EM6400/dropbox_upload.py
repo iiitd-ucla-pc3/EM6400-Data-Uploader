@@ -5,7 +5,6 @@ import glob
 import os
 import time
 
-DATA_BASE_PATH="/home/nipun/Desktop/data/"
 email=db_password.email
 password=db_password.password
 
