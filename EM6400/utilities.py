@@ -28,4 +28,4 @@ def find_count(day,month):
             return 0
         else:
             file_numbers_list=[int(re_pattern.match(file_name).group(1)) for file_name in list_of_files]
-            return max(file_numbers_list)
+            return max(file_numbers_list)+1
