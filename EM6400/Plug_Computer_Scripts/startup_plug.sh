@@ -17,5 +17,4 @@ dhclient mlan0
 sleep 30
 python /root/EM6400-Data-Uploader/EM6400/data_collect_csv_realtime_plot.py & > /root/log_data_collect.txt
 sleep 5
-python /root/EM6400-Data-Uploader/EM6400/dropbox_upload.py & > /root/log_dropbox_upload.txt
-
+sh /root/EM6400-Data-Uploader/EM6400/Plug_Computer_Scripts/ping_test.sh

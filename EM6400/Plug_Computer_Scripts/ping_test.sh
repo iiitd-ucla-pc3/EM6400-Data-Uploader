@@ -2,7 +2,7 @@
 
 NUMBER_OF_PING_REQUESTS=4
 ROUTER_ADDRESS="192.168.0.1"
-SLEEP_TIME=300
+SLEEP_TIME=900
 
 
 
@@ -19,5 +19,11 @@ do
 		echo "ping Working"
 	
 	fi
+	#Killing existing Dropbox Upload Scripts
+	sh killproc.sh
+
+	#Now invoking Python Dropbox upload script
+	python /root/EM6400-Data-Uploader/EM6400/dropbox_upload.py & > /root/log_dropbox_upload.txt
+	
 	sleep $SLEEP_TIME
 done

@@ -18,7 +18,9 @@ try:
         list_of_files=glob.glob(str(DATA_BASE_PATH)+str(folder)+str("/*.csv"))
         print list_of_files
         for f in list_of_files:    
+            print int(time.time())-int(os.stat(f).st_mtime),f
             if int(time.time())-int(os.stat(f).st_mtime)>THRESHOLD_TIME:
+                
                 # Upload the file
                 print f +" will be uploaded"
                 conn.upload_file(f,BASE_UPLOAD_PATH+str(folder),f)
