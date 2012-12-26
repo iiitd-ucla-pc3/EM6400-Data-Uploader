@@ -1,47 +1,78 @@
 $(function() {
-    var a=document.URL;
+	
+	
+	var a=document.URL;
 	var n=a.split("/");
-	//alert(n);
 	var c=n[2];
 	var d=c.split(":")[0];
 	 
     var ws = new WebSocket("ws://"+d+":9999/test");
+	var datalen=10;
+	var datasets={};
+	var field_array=["Time","VA","W","VAR","PF","VLL","VLN","A","F","VA1","W1","VAR1","PF1","V12","V1","A1","VA2","W2","VAR2","PF2","V23","V2","A2","VA3","W3","VAR3","PF3","V31","V3","A3","FwdVAh","FwdWh","FwdVARh","FwdVARh","Present_demand","Max_MD","Max_DM_time","RevVAh","RevWh","RevVARh","RevVARh"]
+	var required_field_array_numbers=[1,9,14,16,23]
+	for (i=0;i<required_field_array_numbers.length;i++)
+	{
+	var j=required_field_array_numbers[i];
+	datasets[field_array[i]]={};
+	datasets[field_array[i]]["label"]=field_array[j];
+	datasets[field_array[i]]["data"]=[];
+	datasets[field_array[i]]["dataindex"]=j;
+	
+	}
+	  // hard-code color indices to prevent them from shifting as
+    var i = 0;
+    $.each(datasets, function(key, val) {
+        val.color = i;
+        ++i;
+    });
+    
+    // insert checkboxes 
+    var choiceContainer = $("#choices");
+    $.each(datasets, function(key, val) {
+        choiceContainer.append('<br/><input type="checkbox" name="' + key +
+                               '" checked="checked" id="id' + key + '">' +
+                               '<label for="id' + key + '">'
+                                + val.label + '</label>');
+    });
+    choiceContainer.find("input").click(cleanOlderData);
+    
+    function cleanOlderData()
+    {
+		
+	}
+    
     var $placeholder = $('#placeholder');
-    var datalen = 12;
-    var plot = null;
-    var series = {
-        label: "Value",
-        lines: { 
-            show: true,
-            fill: false,
-            shadowSize: 5
-        },
-        points: {
-            show:true
-        },
-        data: []
-    };
+    
     ws.onmessage = function(evt) {
-        var d = $.parseJSON(evt.data);
-        series.data.push([d.x, d.y]);
-        while (series.data.length > datalen) {
-            series.data.shift();
-        }
-        if(plot) {
-            plot.setData([series]);
-            plot.setupGrid();
-            plot.draw();
-        } else if(series.data.length > 10) {
-            plot = $.plot($placeholder, [series], {
-                xaxis:{
+		console.log(evt.data);
+		var data_list=evt.data.split(",")
+		var x=parseFloat(data_list)+19800000;
+		console.log(x)
+		var data = [];
+		choiceContainer.find("input:checked").each(function () {
+            var key = $(this).attr("name");
+            
+    		//console.log(JSON.stringify(datasets[key]));
+			datasets[key].data.push([x,parseFloat(data_list[datasets[key]["dataindex"]])]);
+			while (datasets[key].data.length > datalen) {
+			datasets[key].data.shift();
+				}
+				data.push(datasets[key]);
+				//console.log(datasets[key]);
+				if (data.length > 0)
+            $.plot($("#placeholder"), data, {
+                yaxis: { min: 0 },
+               xaxis:{
                     mode: "time",
                     timeformat: "%H:%M:%S",
                     minTickSize: [2, "second"],
-                },
-                
+                }
             });
-            plot.draw();
-        }
+                //data.push(datasets[key]);
+			
+        });
+		
     }
     ws.onopen = function(evt) {
         $('#conn_status').html('<b>Connected</b>');

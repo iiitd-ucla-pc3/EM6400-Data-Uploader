@@ -106,11 +106,12 @@ def zmq_producer(context,instrument):
 				for i in range(0,len(readings_array)-1,2):
 					a=(readings_array[i+1]<<16) +readings_array[i]
 					row=row+str(convert(a))+","
+				socket.send(row)
 				row=row[:-1]+"\n"
 				f.write(row)
-				x = time.time() * 1000+GMT_TIME_DIFFERENCE_MILLISECONDS
-				y=float(row.split(",")[2])
-				socket.send(json.dumps(dict(x=x, y=y)))
+				#x = time.time() * 1000+GMT_TIME_DIFFERENCE_MILLISECONDS
+				#y=float(row.split(",")[2])
+				#socket.send(json.dumps(dict(x=x, y=y)))
 				gevent.sleep(0.5)		
 			except Exception as e:
 				print e
