@@ -8,4 +8,5 @@ apt-get install python-dev
 apt-get install libevent-dev
 pip install pyzmq gevent gevent_zeromq paste 
 pip install pytz
+pip install gevent-websocket
 
