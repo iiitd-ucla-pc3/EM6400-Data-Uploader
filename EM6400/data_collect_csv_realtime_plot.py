@@ -1,17 +1,17 @@
 from configuration import THRESHOLD_TIME, DATA_BASE_PATH, METER_PORT, METER_ID, \
-	BAUD_RATE, HEADER, EM6400_BASE_REGISTER, EM6400_NUMBER_OF_REGISTERS,\
+	BAUD_RATE, HEADER, EM6400_BASE_REGISTER, EM6400_NUMBER_OF_REGISTERS, \
 	GMT_TIME_DIFFERENCE_MILLISECONDS, TIMEZONE
 from gevent_zeromq import zmq
 from geventwebsocket.handler import WebSocketHandler
-from utilities import find_count, convert
+from utilities import find_count, convert, delete_older_folders
 import datetime
 import gevent
 import json
 import minimalmodbus
 import os
 import paste.urlparser
-import time
 import pytz
+import time
 global start_time
 start_time=int(time.time())
 global now
@@ -91,6 +91,7 @@ def zmq_producer(context,instrument):
 		if ((now_time-start_time) > THRESHOLD_TIME) or (now_day!=start_day):
 			if now_day!=start_day:
 				count=find_count(now_day, now_month)-1 #Decrementing by one since we always increase by 1 o/w
+				delete_older_folders(now) #Deleting 2 days older folder
 			count=count+1
 			start_time=now_time
 			start_day=now_day

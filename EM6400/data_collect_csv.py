@@ -1,6 +1,6 @@
 from configuration import METER_PORT, METER_ID, DATA_BASE_PATH, THRESHOLD_TIME, \
 	TIMEZONE, EM6400_BASE_REGISTER, EM6400_NUMBER_OF_REGISTERS, BAUD_RATE, HEADER
-from utilities import convert, find_count
+from utilities import convert, find_count, delete_older_folders
 import datetime
 import minimalmodbus
 import pytz
@@ -28,6 +28,7 @@ while True:
 	if ((now_time-start_time) > THRESHOLD_TIME) or (now_day!=start_day):
 		if now_day!=start_day:
 			count=find_count(now_day, now_month)-1
+			delete_older_folders(now)
 		count=count+1
 		start_time=now_time
 		start_day=now_day
