@@ -35,7 +35,7 @@ def create_temp_table():
 
 
 
-def remove_duplicates(filename):
+def remove_duplicates(filename,contains_header):
     seen=set()
     count=0
     f_read=csv.reader(open(filename, 'rb'))
@@ -43,7 +43,8 @@ def remove_duplicates(filename):
     outfile=re.sub(file_number_string,"backup_"+file_number_string,filename)
     print outfile
     f_write=csv.writer(open(outfile,'wa'))
-    f_read.next()
+    if contains_header:
+        f_read.next()
     for row in f_read:
         if row[0] not in seen:
             seen.add(row[0])
@@ -61,7 +62,7 @@ def remove_duplicates(filename):
     
 
 
-def remove_duplicates_from_csv(base_path,filename):
+def remove_duplicates_from_csv(base_path,filename,contains_header):
     insert_string=create_insert_string()
     [conn,cur]=create_temp_table()
     #Empty database for faster management
@@ -70,7 +71,8 @@ def remove_duplicates_from_csv(base_path,filename):
     os.rename(base_path+filename,base_path+filename+"~")
     file_pointer = csv.reader(open(base_path+filename+"~", 'rb'))
     file_pointer_writer=csv.writer(open(base_path+filename,'wa'))
-    header=file_pointer.next()
+    if contains_header:
+        header=file_pointer.next()
     for row in file_pointer:
         try:
         
@@ -89,12 +91,12 @@ def remove_duplicates_from_csv(base_path,filename):
     return count
 
 print create_insert_string()
-path='/home/nipun/Desktop/data/21_12/'
+path='/home/nipun/Desktop/data/25_12/'
 list_of_files=glob.glob(path+str("/*.csv"))
 number_of_files=len(list_of_files)
 count=0
-for file_name in list_of_files:    
-    print remove_duplicates(file_name),file_name
+for file_name in list_of_files:  
+    count=count+remove_duplicates(file_name,True)
 print count
 outfile=open(path+"overall.csv","wa")
 outfile.write(HEADER)
