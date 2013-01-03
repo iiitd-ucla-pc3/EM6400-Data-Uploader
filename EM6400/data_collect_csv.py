@@ -50,7 +50,9 @@ while True:
 			f.write(row)
 		
 		except Exception as e:
+			log_file=open(DATA_BASE_PATH+"log.txt","w")
 			log_file.write(str(time.time())+" "+e.__str__())
+			log_file.close()
 			instrument = minimalmodbus.Instrument(METER_PORT, METER_ID)		
 
 	

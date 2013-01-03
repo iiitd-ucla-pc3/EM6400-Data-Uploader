@@ -118,7 +118,9 @@ def zmq_producer(context,instrument):
 				gevent.sleep(0.5)		
 			except Exception as e:
 				global log_file
+				log_file=open(DATA_BASE_PATH+"log.txt","w")
 				log_file.write(str(time.time())+" "+e.__str__())
+				log_file.close()
 				instrument = minimalmodbus.Instrument(METER_PORT, METER_ID)		
 	
 
