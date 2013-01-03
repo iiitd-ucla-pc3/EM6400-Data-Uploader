@@ -9,7 +9,7 @@ $(function() {
     var ws = new WebSocket("ws://"+d+":9999/test");
 	var datalen=10;
 	var datasets={};
-	var field_array=["Time","VA","W","VAR","PF","VLL","VLN","A","F","VA1","W1","VAR1","PF1","V12","V1","A1","VA2","W2","VAR2","PF2","V23","V2","A2","VA3","W3","VAR3","PF3","V31","V3","A3","FwdVAh","FwdWh","FwdVARh","FwdVARh","Present_demand","Max_MD","Max_DM_time","RevVAh","RevWh","RevVARh","RevVARh"]
+	var field_array=["Time","VA","W","VAR","PF","VLL","VLN","A","F","VA1","W1","VAR1","PF1","V12","V1","A1","VA2","W2","VAR2","PF2","V23","V2","A2","VA3","W3","VAR3","PF3","V31","V3","A3","FwdVAh","FwdWh","FwdVARh","FwdVARh"]
 	var required_field_array_numbers=[1,9,14,16,23];
 	for (i=0;i<required_field_array_numbers.length;i++)
 	{
