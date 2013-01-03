@@ -7,6 +7,7 @@ import time
 
 email=db_password.email
 password=db_password.password
+dropbox_upload_log=open(DATA_BASE_PATH+"db_log.txt","w")
 
 
 folders=os.listdir(DATA_BASE_PATH)
@@ -16,17 +17,17 @@ try:
     #List of files
     for folder in folders:
         list_of_files=glob.glob(str(DATA_BASE_PATH)+str(folder)+str("/*.csv"))
-        print list_of_files
         for f in list_of_files:    
-            print int(time.time())-int(os.stat(f).st_mtime),f
+            
             if int(time.time())-int(os.stat(f).st_mtime)>THRESHOLD_TIME:
                 
                 # Upload the file
-                print f +" will be uploaded"
+                dropbox_upload_log.write(str(f) +" will be uploaded")
+                
                 conn.upload_file(f,BASE_UPLOAD_PATH+str(folder),f)
                 os.remove(f)
 except:
-    print("Upload failed")
+    dropbox_upload_log.write("Upload failed")
 else:
     pass
 
