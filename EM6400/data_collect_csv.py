@@ -17,6 +17,8 @@ count=find_count(now.day, now.month)
 
 f=open(DATA_BASE_PATH+str(start_day)+"_"+str(start_month)+"/"+str(count)+".csv","wa")
 f.write(HEADER)
+log_file=open(DATA_BASE_PATH+"log.txt","w")
+
 
 while True:
 	now_time=int(time.time())
@@ -48,8 +50,7 @@ while True:
 			f.write(row)
 		
 		except Exception as e:
-			print e
-			print int(time.time())
+			log_file.write(str(time.time())+" "+e.__str__())
 			instrument = minimalmodbus.Instrument(METER_PORT, METER_ID)		
 
 	

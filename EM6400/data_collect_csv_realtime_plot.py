@@ -23,6 +23,8 @@ start_month=now.month
 global count
 count=find_count(now.day, now.month)
 global f
+global log_file
+log_file=open(DATA_BASE_PATH+"log.txt","w")
    
 def main():
 	'''Set up zmq context and greenlets for all the servers, then launch the web
@@ -115,8 +117,8 @@ def zmq_producer(context,instrument):
 				#socket.send(json.dumps(dict(x=x, y=y)))
 				gevent.sleep(0.5)		
 			except Exception as e:
-				print e
-				print time.time() 
+				global log_file
+				log_file.write(str(time.time())+" "+e.__str__())
 				instrument = minimalmodbus.Instrument(METER_PORT, METER_ID)		
 	
 
