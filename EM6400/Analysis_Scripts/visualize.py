@@ -55,7 +55,7 @@ def draw_plot(csv_file,field_numbers,contains_header,save,file_save_path):
 		plt.axes().autoscale_view(True,True,True)
 		plt.plot(X,Y[i]	)
 		av=average(Y[i])				
-		print "Mean of "+y_label+" is: ",av," Stdev is: ",stdev(Y[i], av),"Min :",min(Y[i]),"Max:",max(Y[i])
+		#print "Mean of "+y_label+" is: ",av," Stdev is: ",stdev(Y[i], av),"Min :",min(Y[i]),"Max:",max(Y[i])
 			
 		figure.autofmt_xdate()	
 		if save:
