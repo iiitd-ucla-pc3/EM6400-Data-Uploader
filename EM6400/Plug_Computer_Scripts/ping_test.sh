@@ -20,7 +20,7 @@ do
 	
 	fi
 	#Killing existing Dropbox Upload Scripts
-	sh killproc.sh
+	sh /root/EM6400-Data-Uploader/EM6400/Plug_Computer_Scripts/killproc.sh
 
 	#Now invoking Python Dropbox upload script
 	python /root/EM6400-Data-Uploader/EM6400/dropbox_upload.py & 
