@@ -23,7 +23,7 @@ do
 	sh killproc.sh
 
 	#Now invoking Python Dropbox upload script
-	python /root/EM6400-Data-Uploader/EM6400/dropbox_upload.py & > /root/log_dropbox_upload.txt
+	python /root/EM6400-Data-Uploader/EM6400/dropbox_upload.py & 
 	
 	sleep $SLEEP_TIME
 done

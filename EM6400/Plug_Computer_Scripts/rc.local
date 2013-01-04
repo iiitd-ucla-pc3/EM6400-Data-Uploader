@@ -1,0 +1,34 @@
+#!/bin/sh
+#
+# rc.local
+#
+# This script is executed at the end of each multiuser runlevel.
+# Make sure that the script will "exit 0" on success or any other
+# value on error.
+#
+# In order to enable or disable this script just change the execution
+# bits.
+#
+# By default this script does nothing.
+
+service ssh start
+/root/setup/run_setup
+echo "Init Wireless"
+sleep 4
+/root/setup/init_wlan
+echo "Sleeping for 2 seconds"
+sleep 2
+echo "Setting SSID"
+iwconfig mlan0 essid NETGEAR
+sleep 1
+echo "Obtaining IP"
+dhclient mlan0
+echo "Wireless done"
+sleep 1
+echo "Staring Data Collection"
+                                                                        
+python /root/EM6400-Data-Uploader/EM6400/data_collect_csv_realtime_plot.py &    
+echo "Starting upload daemon"                                                                         
+sh /root/EM6400-Data-Uploader/EM6400/Plug_Computer_Scripts/ping_test.sh & 
+/root/button/mbutton &
+exit 0

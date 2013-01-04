@@ -33,7 +33,7 @@ try:
                 os.remove(f)
 except:
     dropbox_upload_log=open(DATA_BASE_PATH+"db_log.txt","w")
-    dropbox_upload_log.write("Upload failed")
+    dropbox_upload_log.write("Upload failed"+str(int(time.time())))
     dropbox_upload_log.close()
 else:
     pass
