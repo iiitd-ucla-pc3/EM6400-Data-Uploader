@@ -91,7 +91,7 @@ def remove_duplicates_from_csv(base_path,filename,contains_header):
     return count
 
 print create_insert_string()
-path='/home/nipun/Desktop/data/25_12/'
+path='/home/nipun/Desktop/nipun/data/24_1/'
 list_of_files=glob.glob(path+str("/*.csv"))
 number_of_files=len(list_of_files)
 count=0
