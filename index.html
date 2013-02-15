@@ -31,32 +31,79 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <h3>Welcome to GitHub Pages.</h3>
+        <p><strong>Setting up Hardware</strong></p>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+<ul>
+<li>After existing meter, put CT's of required capacity on different phases.</li>
+<li>Set the communication parameters on EM6400 as 19200,8,N,1 </li>
+<li>Connect the D+ coming from the meter to the D- of RS485 to USB module and vice versa.</li>
+</ul><hr><p><strong>Setting up Software</strong></p>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
+<p>After logging into plug computer and connecting it to internet run the following scripts. For internet connection see the following.</p>
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+<ul>
+<li><code>apt-get install git</code></li>
+<li><code>git clone git://github.com/iiitd-ucla-pc3/EM6400-Data-Uploader.git</code></li>
+<li><code>cd EM6400-Data-Uploader/EM6400</code></li>
+<li><code>sh install.sh</code></li>
+</ul><hr><p><strong>Configuring software</strong></p>
 
-<h3>Designer Templates</h3>
+<p>Inside EM6400 folder create a file named db_password.py</p>
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+<p><code>nano db_password.py</code></p>
 
-<h3>Rather Drive Stick?</h3>
+<p>In this file write your Dropbox email and password as follows:</p>
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+<ul>
+<li><p><code>email=YOUR_DROPBOX_REGISTERED_EMAIL_ID</code></p></li>
+<li><p><code>password=YOUR_DROPBOX_PASSWORD</code></p></li>
+</ul><p>Open configuration.py file and adjust the following parameters according to your environment</p>
 
-<h3>Authors and Contributors</h3>
+<ul>
+<li>
+<code>THRESHOLD_TIME</code>: Time in seconds after which a new CSV is created</li>
+<li>
+<code>DATA_BASE_PATH</code>: The path where the data gets stored, for plug computer set it to <code>/root/data/</code>
+</li>
+<li>
+<code>METER_PORT</code>    : The serial port where the meter is connected</li>
+<li>
+<code>METER_ID</code>      : The slave id assigned to the meter</li>
+<li>
+<code>BAUD_RATE</code>     : The baud rate for serial communication</li>
+<li>
+<code>BASE_UPLOAD_PATH</code>:The path on dropbox in which to upload files</li>
+<li>
+<code>HEADER</code>          : Refer this page for more details about different parameters</li>
+<li>
+<code>EM6400_BASE_REGISTER</code>: EM6400 Base Register</li>
+<li>
+<code>EM6400_NUMBER_OF_REGISTERS</code>: Number of Registers to read</li>
+<li>
+<code>GMT_TIME_DIFFERENCE_MILLISECONDS</code>: +5.5 hours=19800000 milliseconds</li>
+<li>
+<code>TIMEZONE</code>: Refer to pytz documentation to put your timezone</li>
+</ul><p>Copy rc.local from Plug_Computer_Scripts to /etc replacing the existing one on the plug computer.
+In this file edit the following according to your configuration.</p>
 
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+<ul>
+<li>ESSID: Write your SSID replacing NETGEAR in the following line <code>iwconfig mlan0 essid NETGEAR</code>
+</li>
+<li>Path for Data collection script: Modify <code>python /root/EM6400-Data-Uploader/EM6400/data_collect_csv_realtime_plot.py &amp;</code> according to your setup.</li>
+<li>Path for ping test script: Modify <code>sh /root/EM6400-Data-Uploader/EM6400/Plug_Computer_Scripts/ping_test.sh &amp;</code> according to your setup path.</li>
+</ul><p>In ping_test.sh file make the following changes according to your setup.</p>
 
-<h3>Support or Contact</h3>
+<ul>
+<li>ROUTER_ADDRESS="192.168.0.1"</li>
+<li>Put your ESSID in the following line <code>iwconfig mlan0 essid "NETGEAR"</code>
+</li>
+<li>Path to killproc: Modify the following path if needed: <code>sh /root/EM6400-Data-Uploader/EM6400/Plug_Computer_Scripts/killproc.sh</code>
+</li>
+<li>Path to Dropbox Upload Script: Modify the following path if needed: <code>python /root/EM6400-Data-Uploader/EM6400/dropbox_upload.py &amp;</code>
+</li>
+</ul><p>`</p>
 
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+<p>`</p>
       </section>
     </div>
 
