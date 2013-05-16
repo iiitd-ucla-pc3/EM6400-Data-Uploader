@@ -74,7 +74,7 @@ class WebSocketApp(object):
         sock.setsockopt(zmq.SUBSCRIBE, "")
         sock.connect('inproc://queue')
         while True:
-            msg = sock.recv()
+         	msg = sock.recv()
             ws.send(msg)
 
 def zmq_producer(context,instrument):
@@ -111,6 +111,7 @@ def zmq_producer(context,instrument):
 					row=row+str(convert(a))+","
 				socket.send(row)
 				row=row[:-1]+"\n"
+				print row
 				f.write(row)
 				#x = time.time() * 1000+GMT_TIME_DIFFERENCE_MILLISECONDS
 				#y=float(row.split(",")[2])

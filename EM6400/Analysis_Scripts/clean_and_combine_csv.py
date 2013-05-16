@@ -91,12 +91,12 @@ def remove_duplicates_from_csv(base_path,filename,contains_header):
     return count
 
 print create_insert_string()
-path='/home/nipun/Desktop/nipun/data/24_1/'
+path='/home/nipun/Dropbox/SmartMeter/Home/Amarjeet/23_2/'
 list_of_files=glob.glob(path+str("/*.csv"))
 number_of_files=len(list_of_files)
 count=0
 for file_name in list_of_files:  
-    count=count+remove_duplicates(file_name,True)
+    count=count+remove_duplicates(file_name,False)
 print count
 outfile=open(path+"overall.csv","wa")
 outfile.write(HEADER)
@@ -104,6 +104,8 @@ for i in range(0,number_of_files):
     outfile.write(open(path+str(i)+".csv").read())
     
 outfile.close()
+
+'''Now removing non-required column headers from the file'''
 
     
     

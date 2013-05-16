@@ -58,6 +58,7 @@ $(function() {
 			while (datasets[key].data.length > datalen) {
 			datasets[key].data.shift();
 				}
+				
 				data.push(datasets[key]);
 				//console.log(datasets[key]);
 				if (data.length > 0)
