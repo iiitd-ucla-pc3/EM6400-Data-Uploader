@@ -47,6 +47,7 @@ while True:
 				a=(readings_array[i+1]<<16) +readings_array[i]
 				row=row+str(convert(a))+","
 			row=row[:-1]+"\n"
+			print now
 			f.write(row)
 		
 		except Exception as e:
